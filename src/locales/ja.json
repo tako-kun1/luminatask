@@ -1,0 +1,145 @@
+{
+    "app": {
+        "title": "Lumina Task",
+        "slogan": "シンプル & 高速",
+        "emptyTasks": "タスクがありません。新しいタスクを追加してください。"
+    },
+    "scheduler": {
+        "notification": {
+            "title": "期限が迫っています",
+            "body": "{{name}} の期限は {{time}} です。最優先タスクに設定しました。"
+        }
+    },
+    "recurrence": {
+        "label": "繰り返し",
+        "none": "なし",
+        "daily": "毎日",
+        "weekly": "毎週",
+        "monthly": "毎月",
+        "interval": "間隔",
+        "days": "曜日"
+    },
+    "task": {
+        "placeholder": "新しいタスクを入力...",
+        "priority": {
+            "label": "優先度",
+            "high": "高",
+            "medium": "中",
+            "low": "低",
+            "none": "なし"
+        },
+        "dueDate": "日付",
+        "time": "時間",
+        "tags": {
+            "label": "タグ",
+            "placeholder": "新しいタグを追加...",
+            "add": "追加"
+        },
+        "notes": {
+            "label": "メモ",
+            "placeholder": "詳細な内容をここに記述..."
+        },
+        "actions": {
+            "cancel": "キャンセル",
+            "save": "保存",
+            "delete": "削除",
+            "edit": "編集",
+            "complete": "完了にする",
+            "incomplete": "未完了に戻す"
+        }
+    },
+    "focusMode": {
+        "title": "現在のタスク",
+        "upcoming": "今後のタスク",
+        "noTasks": "タスクはありません",
+        "noNextTask": "次のタスクはありません",
+        "allComplete": "全てのタスクが完了しました",
+        "today": "今日",
+        "tomorrow": "明日",
+        "windSpeed": "現在風速 {{speed}} km/h",
+        "weatherLoading": "天気情報を取得中...",
+        "weatherError": "天気データが無効です",
+        "locationError": "位置情報が見つかりません"
+    },
+    "help": {
+        "title": "ヘルプと使い方",
+        "welcomeTitle": "Lumina Taskへようこそ",
+        "subtitle": "Lumina Taskを最大限に活用するために",
+        "welcomeSubtitle": "タスク管理をシンプルに、そして美しく。",
+        "sections": {
+            "basics": "基本操作",
+            "focusMode": "集中モード (Focus Mode)",
+            "shortcuts": "ショートカットキー"
+        },
+        "basics": {
+            "add": "タスク追加",
+            "addDesc": "画面上部の入力エリアにタスク名を入力し、Enterキーを押して追加します。",
+            "edit": "詳細設定",
+            "editDesc": "タスクをクリックすると詳細画面が開き、期限・優先度・メモ・添付ファイル・繰り返し設定を行えます。",
+            "organize": "整理・完了",
+            "organizeDesc": "ドラッグ&ドロップで並び替えが可能です。完了したタスクはチェックボックスをクリックしてください。"
+        },
+        "focusModeDesc": "「今やるべきこと」に集中するための専用画面です。余計な情報を排除し、タスクの実行をサポートします。",
+        "focusMode": {
+            "feature1": "現在のタスクと、その次のタスクのみを表示",
+            "feature2": "現在地の天気予報と現在時刻を大きく表示",
+            "feature3": "右下の設定アイコンから、特定のタグが付いたタスクのみに絞り込むことが可能"
+        },
+        "f1Desc": "このヘルプ画面を表示します",
+        "f11Desc": "Focus Mode (集中モード) の切り替え"
+    },
+    "notification": {
+        "title": "通知",
+        "auto": "自動 (30分前 / 1日前)",
+        "off": "通知なし",
+        "min5": "5分前",
+        "min15": "15分前",
+        "min30": "30分前",
+        "hour1": "1時間前",
+        "day1": "1日前"
+    },
+    "settings": {
+        "title": "設定",
+        "theme": {
+            "title": "テーマ設定",
+            "auto": "自動テーマ切り替え",
+            "desc": "昼(6-18)はライト、夜はダークに自動設定"
+        },
+        "location": {
+            "title": "位置情報設定",
+            "manual": "手動設定モード",
+            "manualDesc": "GPSを使用せず、固定の座標を使用します",
+            "searchLabel": "場所を検索 (都市名)",
+            "searchPlaceholder": "例: 東京, 新宿...",
+            "latitude": "緯度",
+            "longitude": "経度",
+            "getLocation": "現在地を取得して入力",
+            "loading": "取得中..."
+        },
+        "language": {
+            "title": "言語設定",
+            "label": "表示言語"
+        },
+        "display": {
+            "title": "表示設定",
+            "showWeather": "天気予報を表示",
+            "showWeatherDesc": "Focus Modeでの天気カードの表示を切り替えます"
+        },
+        "close": "閉じる",
+        "dangerZone": "デリケートな設定",
+        "resetApp": "アプリを初期化",
+        "resetConfirmDesc": "この操作は取り消せません。すべてのタスクと設定が削除されます。"
+    },
+    "weather": {
+        "clear": "快晴",
+        "sunny": "晴れ",
+        "partlyCloudy": "一部曇り",
+        "cloudy": "曇り",
+        "fog": "霧",
+        "rain": "雨",
+        "snow": "雪",
+        "showers": "にわか雪",
+        "thunderstorm": "雷雨",
+        "unknown": "不明"
+    }
+}

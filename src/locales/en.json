@@ -1,0 +1,145 @@
+{
+    "app": {
+        "title": "Lumina Task",
+        "slogan": "Simple & Fast",
+        "emptyTasks": "No tasks yet. Add a new task to get started."
+    },
+    "scheduler": {
+        "notification": {
+            "title": "Deadline Approaching",
+            "body": "{{name}} is due at {{time}}. It has been set as your focus task."
+        }
+    },
+    "recurrence": {
+        "label": "Repeat",
+        "none": "None",
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "interval": "Interval",
+        "days": "Days"
+    },
+    "task": {
+        "placeholder": "Enter a new task...",
+        "priority": {
+            "label": "Priority",
+            "high": "High",
+            "medium": "Medium",
+            "low": "Low",
+            "none": "None"
+        },
+        "dueDate": "Due Date",
+        "time": "Time",
+        "tags": {
+            "label": "Tags",
+            "placeholder": "Add a new tag...",
+            "add": "Add"
+        },
+        "notes": {
+            "label": "Notes",
+            "placeholder": "Enter detailed notes here..."
+        },
+        "actions": {
+            "cancel": "Cancel",
+            "save": "Save",
+            "delete": "Delete",
+            "edit": "Edit",
+            "complete": "Complete",
+            "incomplete": "Mark Incomplete"
+        }
+    },
+    "focusMode": {
+        "title": "CURRENT FOCUS",
+        "upcoming": "UPCOMING",
+        "noTasks": "No tasks",
+        "noNextTask": "No upcoming tasks",
+        "allComplete": "All tasks completed",
+        "today": "TODAY",
+        "tomorrow": "TOMORROW",
+        "windSpeed": "Wind Speed {{speed}} km/h",
+        "weatherLoading": "Loading weather...",
+        "weatherError": "Invalid weather data",
+        "locationError": "Location not found"
+    },
+    "help": {
+        "title": "Help & Usage",
+        "welcomeTitle": "Welcome to Lumina Task",
+        "subtitle": "Getting the most out of Lumina Task",
+        "welcomeSubtitle": "Simplify your task management elegantly.",
+        "sections": {
+            "basics": "Basic Operations",
+            "focusMode": "Focus Mode",
+            "shortcuts": "Keyboard Shortcuts"
+        },
+        "basics": {
+            "add": "Add Task",
+            "addDesc": "Type your task in the input field at the top and press Enter.",
+            "edit": "Edit Details",
+            "editDesc": "Click on any task to open the detailed view where you can set due dates, priority, notes, attachments, and recurrence rules.",
+            "organize": "Organize",
+            "organizeDesc": "Drag and drop tasks to reorder them. Click the checkbox to mark a task as complete."
+        },
+        "focusModeDesc": "A dedicated screen designed to help you focus on 'What to do Now', eliminating distractions.",
+        "focusMode": {
+            "feature1": "Displays only the current task and immediate upcoming ones",
+            "feature2": "Shows local weather forecast and a large clock",
+            "feature3": "Filter tasks by tag using the settings icon in the bottom right"
+        },
+        "f1Desc": "Show this help screen",
+        "f11Desc": "Toggle Focus Mode"
+    },
+    "notification": {
+        "title": "Notification",
+        "auto": "Auto (30m / 1d before)",
+        "off": "Off",
+        "min5": "5 mins before",
+        "min15": "15 mins before",
+        "min30": "30 mins before",
+        "hour1": "1 hour before",
+        "day1": "1 day before"
+    },
+    "settings": {
+        "title": "Settings",
+        "theme": {
+            "title": "Theme Settings",
+            "auto": "Auto Theme Switch",
+            "desc": "Auto switch: Light (6-18), Dark (Night)"
+        },
+        "location": {
+            "title": "Location Settings",
+            "manual": "Manual Mode",
+            "manualDesc": "Use fixed coordinates instead of GPS",
+            "searchLabel": "Search Location (City)",
+            "searchPlaceholder": "Ex: Tokyo, New York...",
+            "latitude": "Latitude",
+            "longitude": "Longitude",
+            "getLocation": "Get Current Location",
+            "loading": "Loading..."
+        },
+        "language": {
+            "title": "Language Settings",
+            "label": "Display Language"
+        },
+        "display": {
+            "title": "Display Settings",
+            "showWeather": "Show Weather Forecast",
+            "showWeatherDesc": "Toggle weather card visibility in Focus Mode"
+        },
+        "close": "Close",
+        "dangerZone": "Danger Zone",
+        "resetApp": "Reset Application",
+        "resetConfirmDesc": "This action cannot be undone. All tasks and settings will be deleted."
+    },
+    "weather": {
+        "clear": "Clear",
+        "sunny": "Sunny",
+        "partlyCloudy": "Partly Cloudy",
+        "cloudy": "Cloudy",
+        "fog": "Fog",
+        "rain": "Rain",
+        "snow": "Snow",
+        "showers": "Showers",
+        "thunderstorm": "Thunderstorm",
+        "unknown": "Unknown"
+    }
+}

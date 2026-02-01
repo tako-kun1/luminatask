@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@layer utilities {
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+}
+
+@layer base {
+    body {
+        @apply select-none cursor-default;
+    }
+
+    input,
+    textarea,
+    [contenteditable] {
+        @apply select-text cursor-text;
+    }
+}
