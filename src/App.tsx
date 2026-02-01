@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { isPermissionGranted, requestPermission } from "@tauri-apps/plugin-notification";
 import { Moon, Sun, Settings, Maximize2 } from "lucide-react";
+import { check } from "@tauri-apps/plugin-updater";
+import { ask } from "@tauri-apps/plugin-dialog";
+import { relaunch } from "@tauri-apps/plugin-process";
 import {
   DndContext,
   closestCenter,
@@ -119,6 +122,35 @@ function AppContent() {
 
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("contextmenu", handleContextMenu);
+
+
+
+    // ... existing imports
+
+    // Check for updates
+    const checkForUpdates = async () => {
+      try {
+        const update = await check();
+        if (update?.available) {
+          const yes = await ask(
+            `新しいバージョン ${update.version} が利用可能です。\n\n${update.body}`,
+            {
+              title: "Lumina Task Update",
+              kind: "info",
+              okLabel: "更新して再起動",
+              cancelLabel: "後で"
+            }
+          );
+          if (yes) {
+            await update.downloadAndInstall();
+            await relaunch();
+          }
+        }
+      } catch (error) {
+        console.error("Update check failed", error);
+      }
+    };
+    checkForUpdates();
 
     // Request notification permission
     const initNotifications = async () => {
