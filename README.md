@@ -1,7 +1,50 @@
-# Tauri + React + Typescript
+# Lumina Task
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+シンプル・高速・美しさを追求した、次世代のタスク管理アプリケーション。
 
-## Recommended IDE Setup
+## 概要
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+Lumina Taskは、「今やるべきこと」に集中するために設計されたデスクトップアプリケーションです。
+無駄な機能を削ぎ落としつつ、必要な機能にはこだわり抜きました。PCの環境設定（ダークモード等）に自動で適応し、あなたの作業を邪魔しません。
+
+## ✨ 主な機能
+
+- **Focus Mode (集中モード)**: 余計な情報を遮断し、現在のタスクと天気・時間だけを表示。
+- **Smart Scheduler**: 期限が迫ったタスクを自動的に通知・昇格。
+- **Weather Integration**: 現在地の天気を自動取得し、作業計画をサポート。
+- **Native Performance**: Rust (Tauri) 製のバックエンドによる超軽量・高速動作。
+- **Auto Update**: 常に最新の機能とセキュリティを提供。
+
+## 🤖 AIによる開発
+
+このアプリケーションの**設計、コーディング、そしてアプリアイコンに至るまで**、そのすべてが **Google Gemini 3 Pro** との対話によって制作されました。
+最先端のAIエージェント技術により、構想から実装、ビルドパイプラインの構築までを一貫して行っています。
+
+## ⚠️ 免責事項とプライバシー
+
+本アプリケーションはAIによる自動コーディングで制作されているため、一部の動作が完全でなかったり、意図しない挙動を含んだりする可能性があります。あらかじめご了承ください。
+
+**データ収集について:**
+Lumina Taskは、**ユーザーの情報を収集・追跡したり、行動データを送信したりする機能を一切持っていません。**
+
+**外部通信について:**
+本アプリケーションが行う外部通信は、以下の2点のみに限られます。
+
+1. **天気予報のための位置情報取得**:
+   - 天気情報を表示するため、Open-Meteo API へ位置情報（緯度・経度）を送信します。
+   - ※ OSからの位置情報取得は環境によって不安定な場合があります（手動設定も可能です）。
+2. **アップデートの確認と取得**:
+   - 最新バージョンがあるかを確認しダウンロードするために、GitHubへと通信を行います。
+
+## 🛠 使用技術
+
+- **Frontend**: React, TypeScript, Tailwind CSS
+- **Backend**: Rust, Tauri
+- **Infrastructure**: GitHub Actions (CI/CD)
+
+## 📦 インストール
+
+[Releases ページ](https://github.com/tako-kun1/luminatask/releases) から最新のインストーラー (`.exe` または `.msi`) をダウンロードしてください。
+
+---
+Created with ❤️ by User & Gemini 3 Pro
