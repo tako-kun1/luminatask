@@ -1,6 +1,7 @@
 import { X, Sparkles } from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
-import { cn } from "../utils";
+import { cn, parseReleaseNotes } from "../utils";
+import { useTranslation } from "react-i18next";
 
 interface ReleaseNotesModalProps {
     isOpen: boolean;
@@ -11,6 +12,9 @@ interface ReleaseNotesModalProps {
 
 export function ReleaseNotesModal({ isOpen, onClose, version, notes }: ReleaseNotesModalProps) {
     const { theme } = useTheme();
+    const { i18n } = useTranslation();
+
+    const displayNotes = parseReleaseNotes(notes, i18n.language);
 
     if (!isOpen) return null;
 
@@ -56,7 +60,7 @@ export function ReleaseNotesModal({ isOpen, onClose, version, notes }: ReleaseNo
                         theme === "dark" ? "bg-black/20" : "bg-gray-50"
                     )}>
                         <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed">
-                            {notes}
+                            {displayNotes}
                         </pre>
                     </div>
 

@@ -3,7 +3,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { isPermissionGranted, requestPermission } from "@tauri-apps/plugin-notification";
 import { Moon, Sun, Settings, Maximize2 } from "lucide-react";
 import { check } from "@tauri-apps/plugin-updater";
-import { ask } from "@tauri-apps/plugin-dialog";
+import { ask, message } from "@tauri-apps/plugin-dialog";
 import { relaunch } from "@tauri-apps/plugin-process";
 import {
   DndContext,
@@ -97,6 +97,59 @@ function AppContent() {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [helpMode, setHelpMode] = useState<"default" | "welcome">("default");
 
+  // Check for updates
+  const checkForUpdates = async (silent: boolean = true) => {
+    try {
+      const update = await check();
+      if (update?.available) {
+        const yes = await ask(
+          `新しいバージョン ${update.version} が利用可能です。\n\n${update.body}`,
+          {
+            title: "Lumina Task Update",
+            kind: "info",
+            okLabel: "更新して再起動",
+            cancelLabel: "後で"
+          }
+        );
+        if (yes) {
+          // Save release notes for next launch
+          if (update.body) {
+            localStorage.setItem("lumina_pending_release_notes", update.body);
+            localStorage.setItem("lumina_pending_update_version", update.version);
+          }
+          await update.downloadAndInstall();
+          await relaunch();
+        }
+      } else if (!silent) {
+        await message("お使いのバージョンは最新です。", {
+          title: "アップデートの確認",
+          kind: "info",
+          okLabel: "OK"
+        });
+      }
+    } catch (error) {
+      console.error("Update check failed", error);
+      if (!silent) {
+        await message(`アップデートの確認に失敗しました。\n${error}`, {
+          title: "エラー",
+          kind: "error"
+        });
+      }
+    }
+  };
+
+  // Initial check & Interval check
+  useEffect(() => {
+    checkForUpdates(true); // Initial check (silent)
+
+    // Check every 3 hours (3 * 60 * 60 * 1000 ms)
+    const intervalId = setInterval(() => {
+      checkForUpdates(true);
+    }, 10800000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   useEffect(() => {
     // Check for first launch
     const tutorialSeen = localStorage.getItem("lumina_tutorial_seen");
@@ -134,39 +187,6 @@ function AppContent() {
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("contextmenu", handleContextMenu);
 
-
-
-    // ... existing imports
-
-    // Check for updates
-    const checkForUpdates = async () => {
-      try {
-        const update = await check();
-        if (update?.available) {
-          const yes = await ask(
-            `新しいバージョン ${update.version} が利用可能です。\n\n${update.body}`,
-            {
-              title: "Lumina Task Update",
-              kind: "info",
-              okLabel: "更新して再起動",
-              cancelLabel: "後で"
-            }
-          );
-          if (yes) {
-            // Save release notes for next launch
-            if (update.body) {
-              localStorage.setItem("lumina_pending_release_notes", update.body);
-              localStorage.setItem("lumina_pending_update_version", update.version);
-            }
-            await update.downloadAndInstall();
-            await relaunch();
-          }
-        }
-      } catch (error) {
-        console.error("Update check failed", error);
-      }
-    };
-    checkForUpdates();
 
     // Request notification permission
     const initNotifications = async () => {
@@ -415,7 +435,11 @@ function AppContent() {
         </div>
       )}
 
-      <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        onCheckUpdates={() => checkForUpdates(false)}
+      />
       <FocusMode
         isOpen={isFocusModeOpen}
         onClose={() => setIsFocusModeOpen(false)}

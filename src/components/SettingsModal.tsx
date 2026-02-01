@@ -1,17 +1,20 @@
-import { X, Settings as SettingsIcon, Navigation, Languages, Cloud, Search, Loader2, AlertTriangle } from "lucide-react";
+import { X, Settings as SettingsIcon, Navigation, Languages, Cloud, Search, Loader2, AlertTriangle, Info, FileText, RefreshCw } from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
 import { cn } from "../utils";
 import { getCurrentPosition } from "@tauri-apps/plugin-geolocation";
 import { invoke } from "@tauri-apps/api/core";
-import { useState } from "react";
+import { getVersion } from "@tauri-apps/api/app";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { ReleaseNotesModal } from "./ReleaseNotesModal";
 
 interface SettingsModalProps {
     isOpen: boolean;
     onClose: () => void;
+    onCheckUpdates: () => void;
 }
 
-export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
+export function SettingsModal({ isOpen, onClose, onCheckUpdates }: SettingsModalProps) {
     const {
         theme, isAuto, setAuto,
         locationMode, setLocationMode, manualCoordinates, setManualCoordinates,
@@ -25,6 +28,55 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
     };
 
     const [isLoadingLoc, setIsLoadingLoc] = useState(false);
+
+    // Version & Release Notes State
+    const [appVersion, setAppVersion] = useState("");
+    const [isReleaseNotesOpen, setIsReleaseNotesOpen] = useState(false);
+    const [releaseNotesData, setReleaseNotesData] = useState<{ version: string; notes: string } | null>(null);
+    const [isLoadingNotes, setIsLoadingNotes] = useState(false);
+
+    useEffect(() => {
+        if (isOpen) {
+            getVersion().then(setAppVersion).catch(console.error);
+        }
+    }, [isOpen]);
+
+    const handleViewReleaseNotes = async () => {
+        setIsLoadingNotes(true);
+        try {
+            // Check if we already have the notes for this version
+            if (releaseNotesData?.version === appVersion) {
+                setIsReleaseNotesOpen(true);
+                setIsLoadingNotes(false);
+                return;
+            }
+
+            // Fetch from GitHub
+            // Note: This assumes the tag format is vX.X.X
+            const response = await fetch(`https://api.github.com/repos/tako-kun1/luminatask/releases/tags/v${appVersion}`);
+
+            if (!response.ok) {
+                throw new Error("Release not found");
+            }
+
+            const data = await response.json();
+            setReleaseNotesData({
+                version: appVersion,
+                notes: data.body || "No release notes available."
+            });
+            setIsReleaseNotesOpen(true);
+        } catch (e) {
+            console.error("Failed to fetch notes", e);
+            // Fallback: Open browser or show error (showing error in modal for now)
+            setReleaseNotesData({
+                version: appVersion,
+                notes: "Could not retrieve release notes from GitHub.\n(You might be offline or rate limited)"
+            });
+            setIsReleaseNotesOpen(true);
+        } finally {
+            setIsLoadingNotes(false);
+        }
+    };
 
     // Search State
     const [searchQuery, setSearchQuery] = useState("");
@@ -364,7 +416,58 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                             </button>
                         </div>
                     </div>
-                    {/* Section 4: Danger Zone */}
+                    {/* Section 4: About Application */}
+                    <div className="space-y-4">
+                        <h3 className="font-semibold text-lg border-b pb-2 border-dashed border-gray-500/30 flex items-center gap-2">
+                            <Info size={18} /> {t("settings.about.title")}
+                        </h3>
+
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h3 className="font-medium mb-1">{t("settings.about.version")}</h3>
+                                <p className="text-xs opacity-70 font-mono">
+                                    v{appVersion || "..."}
+                                </p>
+                            </div>
+                            <button
+                                onClick={handleViewReleaseNotes}
+                                disabled={isLoadingNotes || !appVersion}
+                                className={cn(
+                                    "px-3 py-1.5 rounded-lg text-sm font-bold border transition-colors flex items-center gap-2",
+                                    theme === "dark"
+                                        ? "bg-white/10 border-white/10 hover:bg-white/20"
+                                        : "bg-gray-100 border-gray-200 hover:bg-gray-200"
+                                )}
+                            >
+                                {isLoadingNotes ? <Loader2 size={14} className="animate-spin" /> : <FileText size={14} />}
+                                {t("settings.about.viewReleaseNotes")}
+                            </button>
+                        </div>
+
+                        {/* Check for Updates Button */}
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h3 className="font-medium mb-1">{t("settings.about.checkUpdates")}</h3>
+                                <p className="text-xs opacity-70">
+                                    {t("settings.about.checking")}
+                                </p>
+                            </div>
+                            <button
+                                onClick={onCheckUpdates}
+                                className={cn(
+                                    "px-3 py-1.5 rounded-lg text-sm font-bold border transition-colors flex items-center gap-2",
+                                    theme === "dark"
+                                        ? "bg-white/10 border-white/10 hover:bg-white/20"
+                                        : "bg-gray-100 border-gray-200 hover:bg-gray-200"
+                                )}
+                            >
+                                <RefreshCw size={14} />
+                                {t("settings.about.checkUpdates")}
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Section 5: Danger Zone */}
                     <div className="space-y-4 pt-6 border-t border-red-500/20">
                         <h3 className="text-sm font-bold uppercase tracking-wider opacity-50 flex items-center gap-2 text-red-500">
                             <AlertTriangle size={14} /> {t("settings.dangerZone")}
@@ -404,6 +507,12 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                     </button>
                 </div>
             </div>
+            <ReleaseNotesModal
+                isOpen={isReleaseNotesOpen}
+                onClose={() => setIsReleaseNotesOpen(false)}
+                version={releaseNotesData?.version || ""}
+                notes={releaseNotesData?.notes || ""}
+            />
         </div>
     );
 }

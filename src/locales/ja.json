@@ -128,7 +128,17 @@
         "close": "閉じる",
         "dangerZone": "デリケートな設定",
         "resetApp": "アプリを初期化",
-        "resetConfirmDesc": "この操作は取り消せません。すべてのタスクと設定が削除されます。"
+        "resetConfirmDesc": "この操作は取り消せません。すべてのタスクと設定が削除されます。",
+        "about": {
+            "title": "アプリケーション情報",
+            "version": "バージョン",
+            "viewReleaseNotes": "リリースノートを見る",
+            "checkUpdates": "アップデートを確認",
+            "checking": "確認中...",
+            "upToDate": "最新です",
+            "updateAvailable": "更新可能",
+            "checkFailed": "確認失敗"
+        }
     },
     "weather": {
         "clear": "快晴",

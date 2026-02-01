@@ -128,7 +128,17 @@
         "close": "Close",
         "dangerZone": "Danger Zone",
         "resetApp": "Reset Application",
-        "resetConfirmDesc": "This action cannot be undone. All tasks and settings will be deleted."
+        "resetConfirmDesc": "This action cannot be undone. All tasks and settings will be deleted.",
+        "about": {
+            "title": "About Application",
+            "version": "Version",
+            "viewReleaseNotes": "View Release Notes",
+            "checkUpdates": "Check for Updates",
+            "checking": "Checking...",
+            "upToDate": "Up to date",
+            "updateAvailable": "Update Available",
+            "checkFailed": "Check Failed"
+        }
     },
     "weather": {
         "clear": "Clear",
