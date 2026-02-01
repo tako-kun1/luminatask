@@ -36,6 +36,7 @@ import { cn } from "./utils";
 import { useTranslation } from "react-i18next";
 import { useTaskScheduler } from "./hooks/useTaskScheduler";
 import { ContextMenu } from "./components/ContextMenu";
+import { ReleaseNotesModal } from "./components/ReleaseNotesModal";
 
 // Sortable Item Component Wrapper
 function SortableItem({ id, children }: { id: string; children: React.ReactNode }) {
@@ -68,6 +69,7 @@ function AppContent() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [notification, setNotification] = useState<{ title: string; body: string } | null>(null);
+  const [releaseNotes, setReleaseNotes] = useState<{ version: string; notes: string } | null>(null);
 
   // Scheduler Hook (Deadline Notification & Promotion)
   useTaskScheduler({
@@ -102,6 +104,15 @@ function AppContent() {
       setIsHelpOpen(true);
       setHelpMode("welcome");
       localStorage.setItem("lumina_tutorial_seen", "true");
+    }
+
+    // Check for pending release notes (after update)
+    const pendingNotes = localStorage.getItem("lumina_pending_release_notes");
+    const pendingVersion = localStorage.getItem("lumina_pending_update_version");
+    if (pendingNotes && pendingVersion) {
+      setReleaseNotes({ version: pendingVersion, notes: pendingNotes });
+      localStorage.removeItem("lumina_pending_release_notes");
+      localStorage.removeItem("lumina_pending_update_version");
     }
 
     // Global Keyboard Shortcuts
@@ -142,6 +153,11 @@ function AppContent() {
             }
           );
           if (yes) {
+            // Save release notes for next launch
+            if (update.body) {
+              localStorage.setItem("lumina_pending_release_notes", update.body);
+              localStorage.setItem("lumina_pending_update_version", update.version);
+            }
             await update.downloadAndInstall();
             await relaunch();
           }
@@ -431,6 +447,12 @@ function AppContent() {
         />
       )}
       <HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} mode={helpMode} />
+      <ReleaseNotesModal
+        isOpen={!!releaseNotes}
+        onClose={() => setReleaseNotes(null)}
+        version={releaseNotes?.version || ""}
+        notes={releaseNotes?.notes || ""}
+      />
     </main>
   );
 }
