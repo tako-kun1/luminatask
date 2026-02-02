@@ -38,6 +38,5 @@ jobs:
           tagName: ${{ github.ref_name }}
           releaseName: 'Lumina Task ${{ github.ref_name }}'
           releaseBody: 'See the assets to download this version and install.'
-          draft: false
           prerelease: false
           includeUpdaterJson: true
