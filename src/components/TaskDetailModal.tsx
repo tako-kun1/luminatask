@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { format, set } from "date-fns";
-import { Task, RecurrenceRule } from "../types";
-import { X, Calendar, Flag, Tag, AlignLeft, Clock, Bell, Repeat, Paperclip, Trash2 } from "lucide-react";
+import { Task, RecurrenceRule, Project } from "../types";
+import { X, Calendar, Flag, Tag, AlignLeft, Clock, Bell, Repeat, Paperclip, Trash2, Folder } from "lucide-react";
 import { cn } from "../utils";
 import { useTranslation } from "react-i18next";
 import { open } from "@tauri-apps/plugin-dialog";
@@ -13,9 +13,10 @@ interface TaskDetailModalProps {
     onUpdate: (updatedTask: Task) => void;
     theme: "dark" | "light";
     allTasks: Task[];
+    projects: Project[];
 }
 
-export function TaskDetailModal({ isOpen, onClose, task, onUpdate, theme, allTasks }: TaskDetailModalProps) {
+export function TaskDetailModal({ isOpen, onClose, task, onUpdate, theme, allTasks, projects }: TaskDetailModalProps) {
     const { t } = useTranslation();
     const [editedTask, setEditedTask] = useState<Task | null>(null);
     const [newTag, setNewTag] = useState("");
@@ -187,29 +188,57 @@ export function TaskDetailModal({ isOpen, onClose, task, onUpdate, theme, allTas
 
                 <div className="flex-1 overflow-y-auto p-6 lg:p-8 space-y-8 custom-scrollbar">
 
-                    {/* Priority Row */}
-                    <div className="space-y-1">
-                        <label className={labelClasses}>
-                            <Flag size={16} /> {t("task.priority.label")}
-                        </label>
-                        <div className="flex gap-3">
-                            {priorities.map((p) => (
-                                <button
-                                    key={p.value}
-                                    onClick={() => updateField("priority", p.value)}
-                                    className={cn(
-                                        "flex-1 py-2.5 rounded-lg text-sm font-bold border transition-all duration-200",
-                                        editedTask.priority === p.value
-                                            ? `ring-2 ring-offset-2 ring-offset-transparent ${p.color} border-transparent ring-current`
-                                            : cn(
-                                                "border-transparent opacity-60 hover:opacity-100",
-                                                theme === "dark" ? "bg-white/5 hover:bg-white/10" : "bg-gray-100 hover:bg-gray-200"
-                                            )
-                                    )}
-                                >
-                                    {t(`task.priority.${p.value}`)}
-                                </button>
-                            ))}
+                    {/* Project & Priority Row */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        {/* Project Selector */}
+                        <div className="space-y-1">
+                            <label className={labelClasses}>
+                                <Folder size={16} /> {t("sidebar.projects")}
+                            </label>
+                            <select
+                                value={editedTask.projectId || ""}
+                                onChange={(e) => updateField("projectId", e.target.value || undefined)}
+                                className={cn(inputClasses, "cursor-pointer appearance-none")}
+                            >
+                                <option value="" className={theme === "dark" ? "bg-[#181825] text-white" : "bg-white text-gray-900"}>
+                                    {t("sidebar.inbox")}
+                                </option>
+                                {projects.map(p => (
+                                    <option
+                                        key={p.id}
+                                        value={p.id}
+                                        className={theme === "dark" ? "bg-[#181825] text-white" : "bg-white text-gray-900"}
+                                    >
+                                        {p.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Priority */}
+                        <div className="space-y-1">
+                            <label className={labelClasses}>
+                                <Flag size={16} /> {t("task.priority.label")}
+                            </label>
+                            <div className="flex gap-3">
+                                {priorities.map((p) => (
+                                    <button
+                                        key={p.value}
+                                        onClick={() => updateField("priority", p.value)}
+                                        className={cn(
+                                            "flex-1 py-3 rounded-xl text-sm font-bold border transition-all duration-200",
+                                            editedTask.priority === p.value
+                                                ? `ring-2 ring-offset-2 ring-offset-transparent ${p.color} border-transparent ring-current`
+                                                : cn(
+                                                    "border-transparent opacity-60 hover:opacity-100",
+                                                    theme === "dark" ? "bg-white/5 hover:bg-white/10" : "bg-gray-100 hover:bg-gray-200"
+                                                )
+                                        )}
+                                    >
+                                        {t(`task.priority.${p.value}`)}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     </div>
 

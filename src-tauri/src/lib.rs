@@ -33,6 +33,17 @@ pub struct Task {
 
     #[serde(default)]
     pub attachments: Vec<String>,
+
+    #[serde(rename = "projectId")]
+    pub project_id: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Project {
+    pub id: String,
+    pub name: String,
+    pub color: String,
+    pub icon: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -53,11 +64,14 @@ mod match_types {
 #[derive(Default)]
 struct AppState {
     tasks: Mutex<Vec<Task>>,
+    projects: Mutex<Vec<Project>>,
     db_path: Mutex<PathBuf>,
+    projects_db_path: Mutex<PathBuf>,
     zip_map: Mutex<std::collections::HashMap<String, String>>,
 }
 
 const DB_FILENAME: &str = "tasks.json";
+const PROJECTS_DB_FILENAME: &str = "projects.json";
 
 fn get_db_path(app: &AppHandle) -> PathBuf {
     app.path()
@@ -66,8 +80,24 @@ fn get_db_path(app: &AppHandle) -> PathBuf {
         .join(DB_FILENAME)
 }
 
+fn get_projects_db_path(app: &AppHandle) -> PathBuf {
+    app.path()
+        .app_data_dir()
+        .expect("failed to get app data dir")
+        .join(PROJECTS_DB_FILENAME)
+}
+
 fn save_tasks(tasks: &[Task], path: &PathBuf) -> Result<(), String> {
     let json = serde_json::to_string_pretty(tasks).map_err(|e| e.to_string())?;
+    if let Some(parent) = path.parent() {
+        fs::create_dir_all(parent).map_err(|e| e.to_string())?;
+    }
+    fs::write(path, json).map_err(|e| e.to_string())?;
+    Ok(())
+}
+
+fn save_projects(projects: &[Project], path: &PathBuf) -> Result<(), String> {
+    let json = serde_json::to_string_pretty(projects).map_err(|e| e.to_string())?;
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent).map_err(|e| e.to_string())?;
     }
@@ -209,6 +239,63 @@ fn update_tasks_order(
 }
 
 #[tauri::command]
+fn get_projects(state: State<'_, AppState>) -> Result<Vec<Project>, String> {
+    let projects = state.projects.lock().map_err(|_| "Failed to lock state")?;
+    Ok(projects.clone())
+}
+
+#[tauri::command]
+fn create_project(project: Project, state: State<'_, AppState>) -> Result<Vec<Project>, String> {
+    let mut projects = state.projects.lock().map_err(|_| "Failed to lock state")?;
+    let path = state
+        .projects_db_path
+        .lock()
+        .map_err(|_| "Failed to lock db path")?;
+
+    projects.push(project);
+    save_projects(&projects, &path)?;
+
+    Ok(projects.clone())
+}
+
+#[tauri::command]
+fn delete_project(id: String, state: State<'_, AppState>) -> Result<Vec<Project>, String> {
+    // 1. Delete associated tasks first
+    {
+        let mut tasks = state
+            .tasks
+            .lock()
+            .map_err(|_| "Failed to lock tasks state")?;
+        let tasks_path = state
+            .db_path
+            .lock()
+            .map_err(|_| "Failed to lock tasks db path")?;
+
+        let initial_len = tasks.len();
+        tasks.retain(|t| t.project_id != Some(id.clone()));
+
+        if tasks.len() != initial_len {
+            save_tasks(&tasks, &tasks_path)?;
+        }
+    }
+
+    // 2. Delete the project
+    let mut projects = state
+        .projects
+        .lock()
+        .map_err(|_| "Failed to lock projects state")?;
+    let path = state
+        .projects_db_path
+        .lock()
+        .map_err(|_| "Failed to lock projects db path")?;
+
+    projects.retain(|p| p.id != id);
+    save_projects(&projects, &path)?;
+
+    Ok(projects.clone())
+}
+
+#[tauri::command]
 async fn reset_app(state: State<'_, AppState>) -> Result<Vec<Task>, String> {
     let mut tasks = state.tasks.lock().map_err(|_| "Failed to lock state")?;
     let path = state.db_path.lock().map_err(|_| "Failed to lock db path")?;
@@ -319,9 +406,29 @@ pub fn run() {
                 *tasks_lock = initial_tasks;
             }
 
+            // Load projects
+            let projects_db_path = get_projects_db_path(handle);
+            let mut initial_projects = Vec::new();
+            if projects_db_path.exists() {
+                if let Ok(content) = fs::read_to_string(&projects_db_path) {
+                    if let Ok(loaded) = serde_json::from_str::<Vec<Project>>(&content) {
+                        initial_projects = loaded;
+                    }
+                }
+            }
+            {
+                let mut projects_lock = state.projects.lock().unwrap();
+                *projects_lock = initial_projects;
+            }
+
             {
                 let mut path_lock = state.db_path.lock().unwrap();
                 *path_lock = db_path;
+            }
+
+            {
+                let mut projects_path_lock = state.projects_db_path.lock().unwrap();
+                *projects_path_lock = projects_db_path;
             }
 
             {
@@ -339,7 +446,17 @@ pub fn run() {
             delete_task,
             update_tasks_order,
             reset_app,
-            get_address_from_zip
+            get_tasks,
+            add_task,
+            toggle_task,
+            update_task,
+            delete_task,
+            update_tasks_order,
+            reset_app,
+            get_address_from_zip,
+            get_projects,
+            create_project,
+            delete_project
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -11,6 +11,15 @@ export interface RecurrenceRule {
     monthDays?: number[]; // 1-31
 }
 
+export type Theme = "dark" | "light";
+
+export interface Project {
+    id: string;
+    name: string;
+    color: string;
+    icon: string;
+}
+
 export interface Task {
     id: string;
     text: string;
@@ -26,4 +35,5 @@ export interface Task {
     notes?: string;
     recurrenceRule?: RecurrenceRule;
     attachments?: string[];
+    projectId?: string;
 }

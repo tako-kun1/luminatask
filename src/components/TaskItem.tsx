@@ -1,8 +1,9 @@
 import { Trash2, Check, Calendar, Flag, Tag } from "lucide-react";
 import { format } from "date-fns";
-import { Task } from "../types";
+import { Task, Theme } from "../types";
 import { cn } from "../utils";
 import { useTranslation } from "react-i18next";
+import { useRef, useEffect } from "react";
 
 interface TaskItemProps {
     task: Task;
@@ -10,11 +11,21 @@ interface TaskItemProps {
     onDelete: (id: string) => void;
     onClick?: () => void;
     onContextMenu?: (e: React.MouseEvent, task: Task) => void;
-    theme?: "dark" | "light";
+    theme: Theme;
+    isFocused?: boolean;
 }
 
-export function TaskItem({ task, onToggle, onDelete, onClick, onContextMenu, theme = "dark" }: TaskItemProps) {
+export function TaskItem({ task, onToggle, onDelete, onClick, onContextMenu, theme, isFocused }: TaskItemProps) {
     const { t } = useTranslation();
+    const itemRef = useRef<HTMLDivElement>(null);
+
+    // Scroll into view if focused
+    useEffect(() => {
+        if (isFocused && itemRef.current) {
+            itemRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+    }, [isFocused]);
+
     const priorityColors = {
         high: "border-l-4 border-l-red-500",
         medium: "border-l-4 border-l-yellow-500",
@@ -25,13 +36,11 @@ export function TaskItem({ task, onToggle, onDelete, onClick, onContextMenu, the
 
     return (
         <div
+            ref={itemRef}
             onClick={onClick}
             onContextMenu={(e) => onContextMenu && onContextMenu(e, task)}
             className={cn(
-                "group flex items-center justify-between p-4 mb-3 rounded-xl transition-all duration-300 relative overflow-hidden",
-                "backdrop-blur-md shadow-lg cursor-pointer",
-                "hover:scale-[1.02]",
-                task.completed && "opacity-75",
+                "group flex items-center gap-3 p-3 rounded-xl transition-all duration-200 border select-none",
                 theme === "dark"
                     ? "bg-white/10 border border-white/20 hover:bg-white/20"
                     : "bg-white border border-gray-100 hover:bg-gray-50 shadow-gray-200/50",

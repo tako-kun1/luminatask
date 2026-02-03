@@ -108,16 +108,33 @@ export function HelpModal({ isOpen, onClose, mode = "default" }: HelpModalProps)
                             "rounded-xl border overflow-hidden",
                             theme === "dark" ? "border-white/10 bg-white/5" : "border-gray-100 bg-gray-50"
                         )}>
-                            <div className={cn(
-                                "flex items-center justify-between p-3 border-b",
-                                theme === "dark" ? "border-white/5" : "border-gray-200/50"
-                            )}>
-                                <span className="font-medium font-mono bg-white/10 px-2 py-0.5 rounded text-xs">F1</span>
-                                <span className="opacity-70 text-sm">{t("help.f1Desc")}</span>
-                            </div>
-                            <div className="flex items-center justify-between p-3">
-                                <span className="font-medium font-mono bg-white/10 px-2 py-0.5 rounded text-xs">F11</span>
-                                <span className="opacity-70 text-sm">{t("help.f11Desc")}</span>
+                            <div className={cn("grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 p-3 text-sm")}>
+                                {/* Navigation */}
+                                <span className="font-medium font-mono bg-white/10 px-2 py-0.5 rounded text-xs text-center min-w-[30px]">j / ↓</span>
+                                <span className="opacity-70">{t("help.keys.next")}</span>
+
+                                <span className="font-medium font-mono bg-white/10 px-2 py-0.5 rounded text-xs text-center min-w-[30px]">k / ↑</span>
+                                <span className="opacity-70">{t("help.keys.prev")}</span>
+
+                                {/* Actions */}
+                                <span className="font-medium font-mono bg-white/10 px-2 py-0.5 rounded text-xs text-center min-w-[30px]">Space</span>
+                                <span className="opacity-70">{t("help.keys.toggle")}</span>
+
+                                <span className="font-medium font-mono bg-white/10 px-2 py-0.5 rounded text-xs text-center min-w-[30px]">Enter</span>
+                                <span className="opacity-70">{t("help.keys.edit")}</span>
+
+                                <span className="font-medium font-mono bg-white/10 px-2 py-0.5 rounded text-xs text-center min-w-[30px]">Del</span>
+                                <span className="opacity-70">{t("help.keys.delete")}</span>
+
+                                <span className="font-medium font-mono bg-white/10 px-2 py-0.5 rounded text-xs text-center min-w-[30px]">n</span>
+                                <span className="opacity-70">{t("help.keys.new")}</span>
+
+                                {/* Globals */}
+                                <span className="font-medium font-mono bg-white/10 px-2 py-0.5 rounded text-xs text-center min-w-[30px] mt-2">F1</span>
+                                <span className="opacity-70 mt-2">{t("help.f1Desc")}</span>
+
+                                <span className="font-medium font-mono bg-white/10 px-2 py-0.5 rounded text-xs text-center min-w-[30px]">F11</span>
+                                <span className="opacity-70">{t("help.f11Desc")}</span>
                             </div>
                         </div>
                     </section>

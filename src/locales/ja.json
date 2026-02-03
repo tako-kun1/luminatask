@@ -46,7 +46,9 @@
             "edit": "編集",
             "complete": "完了にする",
             "incomplete": "未完了に戻す"
-        }
+        },
+        "deleteConfirm": "本当に削除しますか？",
+        "completedList": "完了済みタスク"
     },
     "focusMode": {
         "title": "現在のタスク",
@@ -85,8 +87,14 @@
             "feature2": "現在地の天気予報と現在時刻を大きく表示",
             "feature3": "右下の設定アイコンから、特定のタグが付いたタスクのみに絞り込むことが可能"
         },
-        "f1Desc": "このヘルプ画面を表示します",
-        "f11Desc": "Focus Mode (集中モード) の切り替え"
+        "keys": {
+            "next": "次のタスクへ移動",
+            "prev": "前のタスクへ移動",
+            "toggle": "完了 / 未完了の切り替え",
+            "edit": "詳細を開く",
+            "delete": "タスクを削除",
+            "new": "入力欄にフォーカス"
+        }
     },
     "notification": {
         "title": "通知",
@@ -151,5 +159,27 @@
         "showers": "にわか雪",
         "thunderstorm": "雷雨",
         "unknown": "不明"
+    },
+    "sidebar": {
+        "library": "ライブラリ",
+        "inbox": "インボックス",
+        "projects": "プロジェクト",
+        "noProjects": "プロジェクトはまだありません"
+    },
+    "project": {
+        "createTitle": "新規プロジェクト作成",
+        "nameLabel": "プロジェクト名",
+        "placeholder": "例: 仕事, 買い物, etc...",
+        "colorLabel": "カラー設定",
+        "createAction": "作成する"
+    },
+    "stats": {
+        "title": "生産性分析",
+        "completed": "完了タスク数",
+        "total": "総タスク数",
+        "rate": "完了率",
+        "weekly": "今週の完了数推移",
+        "projectDist": "プロジェクト別構成比",
+        "noData": "データがありません"
     }
 }

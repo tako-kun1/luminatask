@@ -46,7 +46,9 @@
             "edit": "Edit",
             "complete": "Complete",
             "incomplete": "Mark Incomplete"
-        }
+        },
+        "deleteConfirm": "Are you sure you want to delete this?",
+        "completedList": "Completed Tasks"
     },
     "focusMode": {
         "title": "CURRENT FOCUS",
@@ -85,8 +87,15 @@
             "feature2": "Shows local weather forecast and a large clock",
             "feature3": "Filter tasks by tag using the settings icon in the bottom right"
         },
-        "f1Desc": "Show this help screen",
-        "f11Desc": "Toggle Focus Mode"
+        "f11Desc": "Toggle Focus Mode",
+        "keys": {
+            "next": "Next Task",
+            "prev": "Previous Task",
+            "toggle": "Complete/Uncomplete",
+            "edit": "Open Details",
+            "delete": "Delete Task",
+            "new": "Focus Input"
+        }
     },
     "notification": {
         "title": "Notification",
@@ -151,5 +160,27 @@
         "showers": "Showers",
         "thunderstorm": "Thunderstorm",
         "unknown": "Unknown"
+    },
+    "sidebar": {
+        "library": "Library",
+        "inbox": "Inbox",
+        "projects": "Projects",
+        "noProjects": "No projects yet"
+    },
+    "project": {
+        "createTitle": "Create New Project",
+        "nameLabel": "Project Name",
+        "placeholder": "e.g., Work, Shopping",
+        "colorLabel": "Color Code",
+        "createAction": "Create Project"
+    },
+    "stats": {
+        "title": "Productivity Analytics",
+        "completed": "Completed Tasks",
+        "total": "Total Tasks",
+        "rate": "Completion Rate",
+        "weekly": "Completed This Week",
+        "projectDist": "Tasks by Project",
+        "noData": "No data available"
     }
 }
