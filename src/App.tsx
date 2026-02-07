@@ -4,7 +4,7 @@ import { isPermissionGranted, requestPermission } from "@tauri-apps/plugin-notif
 import { Moon, Sun, Settings, Maximize2, Menu, ChevronDown, ChevronRight } from "lucide-react";
 import { check } from "@tauri-apps/plugin-updater";
 import { ask, message } from "@tauri-apps/plugin-dialog"; // UX Fix: Native Dialog
-import { relaunch } from "@tauri-apps/plugin-process";
+import { openUrl } from "@tauri-apps/plugin-opener";
 import {
   DndContext,
   closestCenter,
@@ -118,18 +118,13 @@ function AppContent() {
           {
             title: "Lumina Task Update",
             kind: "info",
-            okLabel: "更新して再起動",
+            okLabel: "ダウンロードページを開く",
             cancelLabel: "後で"
           }
         );
         if (yes) {
-          // Save release notes for next launch
-          if (update.body) {
-            localStorage.setItem("lumina_pending_release_notes", update.body);
-            localStorage.setItem("lumina_pending_update_version", update.version);
-          }
-          await update.downloadAndInstall();
-          await relaunch();
+          // Redirect to GitHub Releases page
+          await openUrl(`https://github.com/tako-kun1/luminatask/releases/tag/v${update.version}`);
         }
       } else if (!silent) {
         await message("お使いのバージョンは最新です。", {
