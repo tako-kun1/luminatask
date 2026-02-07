@@ -113,8 +113,12 @@ export function TaskDetailModal({ isOpen, onClose, task, onUpdate, theme, allTas
         setEditedTask((prev) => prev ? { ...prev, [field]: value } : null);
     };
 
-    // Tag Management
-    const existingTags = Array.from(new Set(allTasks.flatMap(t => t.tags || []))).sort();
+    // Tag Management (Scoped to Project)
+    const existingTags = Array.from(new Set(
+        allTasks
+            .filter(t => (t.projectId || null) === (editedTask.projectId || null))
+            .flatMap(t => t.tags || [])
+    )).sort();
 
     // Filter tags that are NOT already in the task AND match input
     const filteredTags = existingTags.filter(tag =>
